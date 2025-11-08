@@ -42,11 +42,11 @@ async function run() {
         //     }
         // })
 
-        // app.get('/products', async (req, res) => {
-        //     const cursor = productsCollection.find().sort({ created_at: -1 }).limit(6);
-        //     const result = await cursor.toArray();
-        //     res.send(result)
-        // })
+        app.get('/movies', async (req, res) => {
+            const cursor = moviesCollection.find().sort({ created_at: -1 }).limit(6);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
 
         // app.get('/all-products/:id', async (req, res) => {
         //     const id = req.params.id;
