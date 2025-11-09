@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -43,8 +43,15 @@ async function run() {
         // })
 
         app.get('/movies', async (req, res) => {
-            const cursor = moviesCollection.find();
+            const cursor = moviesCollection.find().sort({ created_at: -1 });
             const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.get('/movies/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await moviesCollection.findOne(query)
             res.send(result)
         })
 
@@ -76,12 +83,7 @@ async function run() {
             res.send(result);
         })
 
-        // app.get('/all-products/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: new ObjectId(id) }
-        //     const result = await productsCollection.findOne(query)
-        //     res.send(result)
-        // })
+
 
         // bids collection........................
 
