@@ -48,16 +48,32 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/movies/top-rated', async(req, res) => {
+        app.get('/movies/top-rated', async (req, res) => {
             const cursor = moviesCollection.find().sort({ rating: -1 }).limit(8);
             const result = await cursor.toArray();
             res.send(result)
         })
 
-        app.get('/movies/recently-add', async(req, res) => {
+        app.get('/movies/recently-add', async (req, res) => {
             const cursor = moviesCollection.find().sort({ created_at: -1 }).limit(8);
             const result = await cursor.toArray();
             res.send(result)
+        })
+
+        app.get('/movies/action', async (req, res) => {
+            const cursor = moviesCollection.find({
+                genre: { $in: ['Action'] }
+            });
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.get('/movies/drama', async (req, res) => {
+            const cursor = moviesCollection.find({
+                genre: { $in: ['Drama'] }
+            });
+            const result = await cursor.toArray();
+            res.send(result);
         })
 
         // app.get('/all-products/:id', async (req, res) => {
