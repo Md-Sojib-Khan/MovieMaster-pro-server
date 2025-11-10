@@ -63,7 +63,7 @@ async function run() {
         app.get('/movies/action', async (req, res) => {
             const cursor = moviesCollection.find({
                 genre: { $in: ['Action'] }
-            });
+            }).sort({ rating: -1 }).limit(6);
             const result = await cursor.toArray();
             res.send(result);
         })
@@ -80,6 +80,12 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await moviesCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.post('/movies', async(req, res) => {
+            const newMovie = req.body;
+            const result = await moviesCollection.insertOne(newMovie);
             res.send(result)
         })
 
