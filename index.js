@@ -42,11 +42,23 @@ async function run() {
             }
         })
 
+        // app.get('/movies', async (req, res) => {
+        //     const cursor = moviesCollection.find().sort({ created_at: -1 });
+        //     const result = await cursor.toArray();
+        //     res.send(result)
+        // })
         app.get('/movies', async (req, res) => {
-            const cursor = moviesCollection.find().sort({ created_at: -1 });
+            const email = req.query.email;
+            let query = {};
+
+            if (email) {
+                query = { addedBy: email };
+            }
+
+            const cursor = moviesCollection.find(query);
             const result = await cursor.toArray();
-            res.send(result)
-        })
+            res.send(result);
+        });
 
         app.get('/movies/top-rated', async (req, res) => {
             const cursor = moviesCollection.find().sort({ rating: -1 }).limit(8);
@@ -71,7 +83,7 @@ async function run() {
         app.get('/movies/drama', async (req, res) => {
             const cursor = moviesCollection.find({
                 genre: { $in: ['Drama'] }
-            });
+            }).sort({ rating: -1 }).limit(6);
             const result = await cursor.toArray();
             res.send(result);
         })
@@ -83,13 +95,11 @@ async function run() {
             res.send(result)
         })
 
-        app.post('/movies', async(req, res) => {
+        app.post('/movies', async (req, res) => {
             const newMovie = req.body;
             const result = await moviesCollection.insertOne(newMovie);
             res.send(result)
         })
-
-        // bids collection........................
 
 
         // app.get('/all-products/bids/:id', async (req, res) => {
