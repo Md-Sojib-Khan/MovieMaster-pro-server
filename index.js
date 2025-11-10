@@ -29,29 +29,22 @@ async function run() {
         const usersCollection = db.collection('users');
         const moviesCollection = db.collection('movies');
 
-        // app.post('/users', async (req, res) => {
-        //     const newUser = req.body;
-        //     const email = req.body.email;
-        //     const query = { email: email }
-        //     const existingUser = await usersCollection.findOne(query);
-        //     if (existingUser) {
-        //         res.send({ message: 'user already exist' })
-        //     } else {
-        //         const result = await usersCollection.insertOne(newUser);
-        //         res.send(result)
-        //     }
-        // })
+        app.post('/users', async (req, res) => {
+            const newUser = req.body;
+            const email = req.body.email;
+            const query = { email: email }
+            const existingUser = await usersCollection.findOne(query);
+            if (existingUser) {
+                res.send({ message: 'user already exist' })
+            } else {
+                const result = await usersCollection.insertOne(newUser);
+                res.send(result)
+            }
+        })
 
         app.get('/movies', async (req, res) => {
             const cursor = moviesCollection.find().sort({ created_at: -1 });
             const result = await cursor.toArray();
-            res.send(result)
-        })
-
-        app.get('/movies/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) }
-            const result = await moviesCollection.findOne(query)
             res.send(result)
         })
 
@@ -83,7 +76,12 @@ async function run() {
             res.send(result);
         })
 
-
+        app.get('/movies/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await moviesCollection.findOne(query)
+            res.send(result)
+        })
 
         // bids collection........................
 
