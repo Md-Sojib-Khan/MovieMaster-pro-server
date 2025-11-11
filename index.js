@@ -43,6 +43,12 @@ async function run() {
             }
         })
 
+        app.get('/all-users', async(req, res) => {
+            const cursor = usersCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
         // app.get('/movies', async (req, res) => {
         //     const cursor = moviesCollection.find().sort({ created_at: -1 });
         //     const result = await cursor.toArray();
