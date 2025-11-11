@@ -62,7 +62,9 @@ async function run() {
         });
 
         app.get('/movies/top-rated', async (req, res) => {
-            const cursor = moviesCollection.find().sort({ rating: -1 }).limit(8);
+            const cursor = moviesCollection.find({
+                rating: {$gte: 8}
+            }).sort({ rating: -1 }).limit(8);
             const result = await cursor.toArray();
             res.send(result)
         })
