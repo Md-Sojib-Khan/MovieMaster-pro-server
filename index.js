@@ -101,27 +101,16 @@ async function run() {
             res.send(result)
         })
 
-
-        // app.get('/all-products/bids/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { product: new ObjectId(id) }
-        //     const cursor = bidsCollection.find(query).sort({ bid_price: -1 })
-        //     const result = await cursor.toArray();
-        //     res.send(result)
-        // })
-
-        // app.get('/bids', async (req, res) => {
-        //     const email = req.query.email;  // URL এর query থেকে email নিচ্ছে
-        //     let query = {};
-
-        //     if (email) {
-        //         query = { bayer_email: email }; // শুধু ওই ইউজারের bids দেখাবে
-        //     }
-
-        //     const cursor = bidsCollection.find(query);
-        //     const result = await cursor.toArray();
-        //     res.send(result);
-        // });
+        app.put('/movies/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const data = req.body;
+            const query = { _id: new ObjectId(id) }
+            const update = {
+                $set: data
+            }
+            const result = await moviesCollection.updateOne(query, update)
+            res.send(result)
+        })
 
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
