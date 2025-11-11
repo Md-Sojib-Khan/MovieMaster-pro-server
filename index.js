@@ -28,6 +28,7 @@ async function run() {
         const db = client.db('movie_master');
         const usersCollection = db.collection('users');
         const moviesCollection = db.collection('movies');
+        const wishlistCollection = db.collection('wishlist');
 
         app.post('/users', async (req, res) => {
             const newUser = req.body;
@@ -112,10 +113,36 @@ async function run() {
             res.send(result)
         })
 
-        app.delete('/movies/:id', async(req, res) => {
+        app.delete('/movies/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id : new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await moviesCollection.deleteOne(query)
+            res.send(result)
+        })
+
+        app.post('/wishlist', async (req, res) => {
+            const data = req.body;
+            const result = await wishlistCollection.insertOne(data)
+            res.send(result)
+        })
+
+        app.get('/wishlist', async (req, res) => {
+            const email = req.query.email;
+            let query = {};
+
+            if (email) {
+                query = { wishlist_by: email };
+            }
+
+            const cursor = wishlistCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        app.delete('/wishlist/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: (id) }
+            const result = await wishlistCollection.deleteOne(query)
             res.send(result)
         })
 
